@@ -90,8 +90,8 @@ public class CustomerService {
 	 * @param custId
 	 * @return
 	 */
-	public Customer getCustomerById(Long custId) {
-		com.cognizant.customer.model.CustomerDTO toModel = customerRepository.getCustomerById(custId);
+	public Customer getCustomerById(long custId) {
+		CustomerDTO toModel = customerRepository.getCustomerById(custId);
 		return customerMapper.mapModelToDomain(toModel);
 	}
 

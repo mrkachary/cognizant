@@ -18,6 +18,8 @@ import com.cognizant.customer.domain.Customer;
 import com.cognizant.customer.exception.InvalidDataException;
 import com.cognizant.customer.service.CustomerService;
 
+import lombok.extern.log4j.Log4j2;
+@Log4j2
 @RestController
 @RequestMapping("/customer")
 public class CustomerDetailController {
@@ -30,10 +32,14 @@ public class CustomerDetailController {
 	 * 
 	 * @param customer
 	 * @return
+	 * @throws InvalidDataException 
 	 */
 	@PostMapping("/create")
-	public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
-		
+	public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) throws InvalidDataException {
+		if(customer.getFirstName()==null || customer.getLastName()  == null || customer.getAddress()==null) {
+			log.debug("first name, last name, or address is missing");
+			throw new InvalidDataException("first name, last name, or address is missing");
+		}
 		Customer savedCustomer= customerService.createCustomer(customer);
 		return ResponseEntity.status(HttpStatus.CREATED).body(savedCustomer);
 	}
@@ -67,9 +73,14 @@ public class CustomerDetailController {
 	 * @return
 	 */
 	@GetMapping("/custId/{custId}") 
-	public ResponseEntity<Customer> getCustomerById(@PathVariable("custId") Long custId) {
-		Customer customers = customerService.getCustomerById(custId);
-		return ResponseEntity.ok().body(customers);
+	public ResponseEntity<Customer> getCustomerById(@PathVariable("custId") long custId) {
+		Customer customer = customerService.getCustomerById(custId);
+		if(customer==null) {
+			log.debug("Customer with customer id "+custId+" does not exists");
+			return new ResponseEntity<Customer>(HttpStatus.NOT_FOUND);
+		}
+		log.info("Customer with customer id "+custId+" does not exists");
+		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
 	}
 	
 	/**
@@ -82,7 +93,12 @@ public class CustomerDetailController {
 	@PutMapping("/cust-id") 
 	public ResponseEntity<Customer> updateCustomerDetails(@RequestBody Customer customer) throws InvalidDataException {
 		if(customer.getCustId()==0L) {
+			log.debug("Missing customer id ");
 			throw new InvalidDataException("customer id is required");
+		}
+		if(customer.getAddress()==null) {
+			log.debug("Address must be required");
+			throw new InvalidDataException("Address is required required");
 		}
 		Customer customers = customerService.updateLivingAddress(customer);
 		

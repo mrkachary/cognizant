@@ -57,14 +57,14 @@ public class CustomerRepository {
 	@SuppressWarnings("unchecked")
 	public List<CustomerDTO> getAllCustomerByName(String firstName, String lastName) {
 		Query query = null;
-		if(firstName==null) {
-			firstName ="";
+		if(firstName==null && lastName!=null) {
 			query = entityManager.createNamedQuery("findAllCustomersByLastname", CustomerDTO.class);
 			query.setParameter("lastName", "%"+lastName.trim()+"%");
-		} else if(lastName==null) {
-			lastName ="";
+		} else if(firstName!=null&& lastName==null) {
 			query = entityManager.createNamedQuery("findAllCustomersByFirstame", CustomerDTO.class);
 			query.setParameter("firstName", "%"+firstName.trim()+"%");
+		} else if(firstName==null && lastName==null) {
+			query = entityManager.createNamedQuery("findAllCustomers", CustomerDTO.class);
 		} else {
 			query = entityManager.createNamedQuery("findAllCustomersByFirstnameAndLastname", CustomerDTO.class);
 			query.setParameter("firstName", "%"+firstName.trim()+"%");
