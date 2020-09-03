@@ -1,9 +1,9 @@
-#Customer Detail Management Microservice
+#Customer Detail Management Service
 This Application is Microservice for managing Customer Details
 
 ## About
 
-This application manages customer details with their address. Search by first or/and last name feature enabled. This app can add customer having only one living address. The address can be modified. This application is build Spring boot 2 and swagger is enabled. Below Technological stack used.
+This application manages customer details with their address. Search by first or/and last name feature enabled. This application can add customer having only one living address. The address can be modified. This application is build on Spring boot 2 and enabled with swagger. Below Technological stack is used.
 
 - Java 11
 - Spring Boot 2
@@ -19,7 +19,7 @@ This application manages customer details with their address. Search by first or
 
 ## Sample data 
 
-Swagger is enabled. After installing the please click [Here](http://localhost:8080/swagger-ui.html#/) and make use below data for create and update
+Swagger is enabled. After installing the please click [Here](http://localhost:8080/swagger-ui.html#/) and make use of below data for create and update
 
  Request Body  for Create :  
 

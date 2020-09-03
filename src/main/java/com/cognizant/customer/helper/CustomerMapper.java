@@ -18,7 +18,7 @@ public class CustomerMapper {
 		mappedCustomer.setFirstName(customer.getFirstName());
 		mappedCustomer.setLastName(customer.getLastName());
 		mappedCustomer.setAge(customer.getAge());
-		
+
 		mappedAddress.setCustAddressId(customer.getAddress().getCustAddressId());
 		mappedAddress.setDoorNo(customer.getAddress().getDoorNo());
 		mappedAddress.setStreet(customer.getAddress().getStreet());
@@ -42,7 +42,7 @@ public class CustomerMapper {
 		mappedCustomer.setFirstName(customer.getFirstName());
 		mappedCustomer.setLastName(customer.getLastName());
 		mappedCustomer.setAge(customer.getAge());
-		
+
 		mappedAddress.setCustAddressId(customer.getAddress().getCustAddressId());
 		mappedAddress.setDoorNo(customer.getAddress().getDoorNo());
 		mappedAddress.setStreet(customer.getAddress().getStreet());
@@ -70,7 +70,7 @@ public class CustomerMapper {
 		mappedAddress.setZipCode(customer.getAddress().getZipCode());
 		mappedAddress.setCreatedDate(customer.getAddress().getCreatedDate());
 		mappedAddress.setUpdatedDate(customer.getAddress().getUpdatedDate());
-		
+
 		toModel.setAddress(mappedAddress);
 		return toModel;
 	}

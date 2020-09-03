@@ -7,6 +7,7 @@ import com.google.common.reflect.TypeToken;
 
 public class TestUtils {
 
+	@SuppressWarnings("rawtypes")
 	public static List jsonToList(String json, TypeToken token) {
 		Gson gson = new Gson();
 		return gson.fromJson(json, token.getType());

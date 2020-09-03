@@ -27,7 +27,7 @@ public class CustomerDetailController {
 
 	@Autowired 
 	CustomerService customerService; 
-	
+
 	/**
 	 * Retrieve a new customer
 	 * 
@@ -52,7 +52,7 @@ public class CustomerDetailController {
 		Customer savedCustomer= customerService.createCustomer(customer);
 		return ResponseEntity.status(HttpStatus.CREATED).body(savedCustomer);
 	}
-	
+
 	/**
 	 * Retrieve all customer
 	 * @return
@@ -62,7 +62,7 @@ public class CustomerDetailController {
 		List<Customer> customers = customerService.getAllCustomer();
 		return ResponseEntity.ok().body(customers);
 	}
-	
+
 	/**
 	 * retrieve by first or last name
 	 * 
@@ -75,7 +75,7 @@ public class CustomerDetailController {
 		List<Customer> customers = customerService.getAllCustomerByName(firstname, lastname);
 		return ResponseEntity.ok().body(customers);
 	}
-	
+
 	/**
 	 * 
 	 * @param custId
@@ -91,7 +91,7 @@ public class CustomerDetailController {
 		log.info("Customer with customer id "+custId+" does not exists");
 		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * 
 	 * @param customer
@@ -111,7 +111,7 @@ public class CustomerDetailController {
 			throw new InvalidDataException("Address is required required");
 		}
 		Customer customers = customerService.updateLivingAddress(customer);
-		
+
 		return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(customers);
 	}	
 }

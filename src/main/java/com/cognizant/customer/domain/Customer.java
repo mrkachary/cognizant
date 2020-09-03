@@ -23,7 +23,7 @@ public class Customer {
 
 	@JsonProperty("age")
 	private int age;
-	
+
 	@JsonProperty("created_date")
 	private Timestamp createdDate;
 

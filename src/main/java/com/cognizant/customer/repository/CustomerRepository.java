@@ -46,7 +46,7 @@ public class CustomerRepository {
 		Query query = entityManager.createNamedQuery("findAllCustomers", CustomerDTO.class);
 		return query.getResultList();
 	}
-	
+
 	/**
 	 * retrieve customer by firstname and/or lastname
 	 * 

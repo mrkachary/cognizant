@@ -55,10 +55,10 @@ public class CustomerService {
 	 * @return
 	 */
 	public List<Customer> getAllCustomer() {
-		
+
 		List<CustomerDTO> procuredCustomers = customerRepository.getAllCustomers();
 		List<Customer> customers = new ArrayList<Customer>();
-		
+
 		for(CustomerDTO procuredCustomer : procuredCustomers) {
 			Customer customer = customerMapper.mapModelToDomain(procuredCustomer);
 			customers.add(customer);
@@ -76,7 +76,7 @@ public class CustomerService {
 	public List<Customer> getAllCustomerByName(String firstName, String lastName) {
 		List<com.cognizant.customer.model.CustomerDTO> procuredCustomers = customerRepository.getAllCustomerByName(firstName, lastName);
 		List<Customer> customers = new ArrayList<Customer>();
-		
+
 		for(com.cognizant.customer.model.CustomerDTO procuredCustomer : procuredCustomers) {
 			Customer customer = customerMapper.mapModelToDomain(procuredCustomer);
 			customers.add(customer);
@@ -103,14 +103,14 @@ public class CustomerService {
 	 * @return
 	 * @throws ResourceNotFoundException 
 	 */
-	
+
 	public Customer updateLivingAddress(Customer customer) throws ResourceNotFoundException {
 		com.cognizant.customer.model.CustomerDTO toModel = customerRepository.getCustomerById(customer.getCustId());
 		Date currentDate = new Date();
 		Timestamp currentTimestamp = new Timestamp(currentDate.getTime());
 		if(toModel!=null) {
 			com.cognizant.customer.model.CustomerDTO updatedCustomer= customerMapper.mapAddress(toModel, customer);
-			
+
 			updatedCustomer.setUpdatedDate(currentTimestamp);
 			updatedCustomer.getAddress().setUpdatedDate(currentTimestamp);
 			log.info("Updating customer living address");

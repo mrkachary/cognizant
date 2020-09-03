@@ -16,20 +16,20 @@ import lombok.Data;
 
 @Entity(name="CUSTOMER")
 @NamedQueries(value = 
-		{
-				@NamedQuery(
+{
+		@NamedQuery(
 				name="findAllCustomers",
 				query="SELECT c FROM com.cognizant.customer.model.CustomerDTO c LEFT JOIN com.cognizant.customer.model.AddressDTO a ON c.custAddressId = a.custAddressId "
 				),
-				@NamedQuery(
+		@NamedQuery(
 				name="findAllCustomersByFirstame",
 				query="SELECT c FROM com.cognizant.customer.model.CustomerDTO c LEFT JOIN com.cognizant.customer.model.AddressDTO a ON c.custAddressId = a.custAddressId WHERE c.firstName LIKE :firstName"
 				),
-				@NamedQuery(
+		@NamedQuery(
 				name="findAllCustomersByLastname",
 				query="SELECT c FROM com.cognizant.customer.model.CustomerDTO c LEFT JOIN com.cognizant.customer.model.AddressDTO a ON c.custAddressId = a.custAddressId WHERE c.lastName LIKE :lastName"
 				),
-				@NamedQuery(
+		@NamedQuery(
 				name="findAllCustomersByFirstnameAndLastname",
 				query="SELECT c FROM com.cognizant.customer.model.CustomerDTO c LEFT JOIN com.cognizant.customer.model.AddressDTO a ON c.custAddressId = a.custAddressId WHERE c.firstName LIKE :firstName AND c.lastName LIKE :lastName"
 				)
@@ -48,10 +48,10 @@ public class CustomerDTO {
 
 	@Column(name="LAST_NAME")
 	private String lastName;
-	
+
 	@Column(name="AGE")
 	private int age;
-	
+
 	@Column(name="CUST_ADDRS_ID")
 	private long custAddressId;
 
@@ -60,7 +60,7 @@ public class CustomerDTO {
 
 	@Column(name="UPDATED_DATE")
 	private Timestamp updatedDate;
-	
+
 	@OneToOne
 	private AddressDTO address;
 
