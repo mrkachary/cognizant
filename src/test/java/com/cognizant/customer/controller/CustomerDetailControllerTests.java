@@ -291,7 +291,7 @@ public class CustomerDetailControllerTests{
 		customerList.add(customer);
 
 		Customer customer1 = new Customer();
-		customer1.setFirstName("Brian");
+		customer1.setFirstName("Melena");
 		customer1.setLastName("Hamphire");
 		customer.setAddress(address);
 		customerList.add(customer1);
