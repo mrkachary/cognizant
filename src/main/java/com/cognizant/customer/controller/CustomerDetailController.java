@@ -36,9 +36,17 @@ public class CustomerDetailController {
 	 */
 	@PostMapping("/create")
 	public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) throws InvalidDataException {
-		if(customer.getFirstName()==null || customer.getLastName()  == null || customer.getAddress()==null) {
-			log.debug("first name, last name, or address is missing");
-			throw new InvalidDataException("first name, last name, or address is missing");
+		if(customer.getFirstName()==null || customer.getFirstName().isEmpty()) {
+			log.debug("First name is missing");
+			throw new InvalidDataException("first name is missing");
+		}
+		if(customer.getLastName()  == null || customer.getLastName().isEmpty() ) {
+			log.debug("Last name is missing");
+			throw new InvalidDataException("Last name is missing");
+		}
+		if(customer.getAddress()==null) {
+			log.debug("Address is missing");
+			throw new InvalidDataException("Address is missing");
 		}
 		Customer savedCustomer= customerService.createCustomer(customer);
 		return ResponseEntity.status(HttpStatus.CREATED).body(savedCustomer);
@@ -72,8 +80,8 @@ public class CustomerDetailController {
 	 * @param custId
 	 * @return
 	 */
-	@GetMapping("/custId/{custId}") 
-	public ResponseEntity<Customer> getCustomerById(@PathVariable("custId") long custId) {
+	@GetMapping("/cust-id/{cust-id}") 
+	public ResponseEntity<Customer> getCustomerById(@PathVariable("cust-id") long custId) {
 		Customer customer = customerService.getCustomerById(custId);
 		if(customer==null) {
 			log.debug("Customer with customer id "+custId+" does not exists");
@@ -103,5 +111,5 @@ public class CustomerDetailController {
 		Customer customers = customerService.updateLivingAddress(customer);
 		
 		return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(customers);
-	}
+	}	
 }
