@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cognizant.customer.domain.Customer;
 import com.cognizant.customer.exception.InvalidDataException;
+import com.cognizant.customer.exception.ResourceNotFoundException;
 import com.cognizant.customer.service.CustomerService;
 
 import lombok.extern.log4j.Log4j2;
@@ -97,9 +98,10 @@ public class CustomerDetailController {
 	 * @param custId
 	 * @return
 	 * @throws InvalidDataException 
+	 * @throws ResourceNotFoundException 
 	 */
 	@PutMapping("/cust-id") 
-	public ResponseEntity<Customer> updateCustomerDetails(@RequestBody Customer customer) throws InvalidDataException {
+	public ResponseEntity<Customer> updateCustomerDetails(@RequestBody Customer customer) throws InvalidDataException, ResourceNotFoundException {
 		if(customer.getCustId()==0L) {
 			log.debug("Missing customer id ");
 			throw new InvalidDataException("customer id is required");

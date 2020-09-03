@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cognizant.customer.domain.Customer;
-import com.cognizant.customer.exception.InvalidDataException;
+import com.cognizant.customer.exception.ResourceNotFoundException;
 import com.cognizant.customer.helper.CustomerMapper;
 import com.cognizant.customer.model.CustomerDTO;
 import com.cognizant.customer.repository.CustomerRepository;
@@ -101,10 +101,10 @@ public class CustomerService {
 	 * 
 	 * @param custId
 	 * @return
-	 * @throws InvalidDataException 
+	 * @throws ResourceNotFoundException 
 	 */
 	
-	public Customer updateLivingAddress(Customer customer) throws InvalidDataException {
+	public Customer updateLivingAddress(Customer customer) throws ResourceNotFoundException {
 		com.cognizant.customer.model.CustomerDTO toModel = customerRepository.getCustomerById(customer.getCustId());
 		Date currentDate = new Date();
 		Timestamp currentTimestamp = new Timestamp(currentDate.getTime());
@@ -119,7 +119,7 @@ public class CustomerService {
 			return customerMapper.mapModelToDomain(toModel);
 		} else {
 			log.error("Cannot update customer address");
-			throw new InvalidDataException("could not update customer with id "+customer.getCustId());
+			throw new ResourceNotFoundException("could not update customer with id "+customer.getCustId());
 		}		
 	}
 }

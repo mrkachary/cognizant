@@ -2,7 +2,11 @@ package com.cognizant.customer.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +27,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.cognizant.customer.domain.Address;
 import com.cognizant.customer.domain.Customer;
+import com.cognizant.customer.exception.ResourceNotFoundException;
 import com.cognizant.customer.helper.TestUtils;
 import com.cognizant.customer.service.CustomerService;
 
@@ -39,12 +44,28 @@ public class CustomerDetailControllerTests{
 
 	Address mockAddress = populateAddress();
 	Customer mockCustomer = populateCustomer(mockAddress);
+	List<Customer> mockCustomerList = populateCustomerList();
 
 	String customerJson = "{\"first_name\":\"Brian\",\"last_name\":\"Hamphire\",\"cust_address\":{\"door_no\":\"237-1\",\"street\":\"Briadale St\",\"city\":\"New York\",\"country\":\"United States\",\"zip_code\":\"05601\"}} ";
 	String customerWithoutFirstnameJson = "{\"first_name\":\"\",\"last_name\":\"Hamphire\",\"cust_address\":{\"door_no\":\"237-1\",\"street\":\"Briadale St\",\"city\":\"New York\",\"country\":\"United States\",\"zip_code\":\"05601\"}} ";
 	String customerWithoutLastnameJson = "{\"first_name\":\"Brian\",\"last_name\":\"\",\"cust_address\":{\"door_no\":\"237-1\",\"street\":\"Briadale St\",\"city\":\"New York\",\"country\":\"United States\",\"zip_code\":\"05601\"}} ";
 	String customerWithChangedAddressJson = "{\"cust_id\":1,\"first_name\":\"Brian\",\"last_name\":\"Hamphire\",\"cust_address\":{\"door_no\":\"444-1\",\"street\":\"Briadale St\",\"city\":\"New Orlean\",\"country\":\"United States\",\"zip_code\":\"05601\"}} ";
 	String customerWithoutAddressJson = "{\"first_name\":\"Brian\",\"last_name\":\"Hamphire\"} ";
+	String customerWithNullAddressJson = "{\"cust_id\":1,\"first_name\":\"Brian\",\"last_name\":\"Hamphire\",\"cust_address\":null} ";
+	String customerWithNoCustIdJson = "{\"first_name\":\"Brian\",\"last_name\":\"Hamphire\",\"cust_address\":{\"door_no\":\"237-1\",\"street\":\"Briadale St\",\"city\":\"New York\",\"country\":\"United States\",\"zip_code\":\"05601\"}} ";
+	String customerWithChangedAddressWithWrongCustIdJson = "{\"cust_id\":999999,\"first_name\":\"Brian\",\"last_name\":\"Hamphire\",\"cust_address\":\"\"} ";
+	
+	@Test
+	public void retrieveAllCustomer() throws Exception {
+		String uri = "/customer/all";
+		Mockito.when(customerService.getAllCustomer()).thenReturn(mockCustomerList);
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON);
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		int status = result.getResponse().getStatus();
+		assertEquals("Incorrect Response Status", HttpStatus.OK.value(), status);
+		verify(customerService).getAllCustomer();
+	}
+
 
 	@Test
 	public void retrieveCustomerById() throws Exception {
@@ -89,7 +110,7 @@ public class CustomerDetailControllerTests{
 				.accept(MediaType.APPLICATION_JSON).content(customerJson).contentType(MediaType.APPLICATION_JSON);
 
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
+		verify(customerService).createCustomer(Mockito.any());
 		MockHttpServletResponse response = result.getResponse();
 		assertEquals(HttpStatus.CREATED.value(), response.getStatus());
 	}
@@ -97,17 +118,15 @@ public class CustomerDetailControllerTests{
 
 	@Test
 	public void createCustomerWithoutFirstname() throws Exception {
-		Mockito.when(customerService.createCustomer(Mockito.any())).thenReturn(mockCustomer);
-
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/customer/create")
 				.accept(MediaType.APPLICATION_JSON).content(customerWithoutFirstnameJson).contentType(MediaType.APPLICATION_JSON);
 
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
+		verify(customerService, never()).createCustomer(Mockito.any());
 		MockHttpServletResponse response = result.getResponse();
 		assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
 	}
-	
+
 	@Test
 	public void createCustomerWithoutLastname() throws Exception {
 
@@ -119,7 +138,7 @@ public class CustomerDetailControllerTests{
 		MockHttpServletResponse response = result.getResponse();
 		assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
 	}
-	
+
 	@Test
 	public void createCustomerWithoutAddress() throws Exception {
 
@@ -127,17 +146,17 @@ public class CustomerDetailControllerTests{
 				.accept(MediaType.APPLICATION_JSON).content(customerWithoutAddressJson).contentType(MediaType.APPLICATION_JSON);
 
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
+		verify(customerService, never()).updateLivingAddress(Mockito.any());
 		MockHttpServletResponse response = result.getResponse();
 		assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
 	}
-	
+
 	@Test
 	public void updateCustomer() throws Exception {
 		mockAddress.setDoorNo("444-1");
 		mockAddress.setCity("New Orlean");
 		mockCustomer.setAddress(mockAddress);
-		
+
 		Mockito.when(customerService.updateLivingAddress(mockCustomer)).thenReturn(mockCustomer);
 
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/customer/cust-id")
@@ -147,6 +166,52 @@ public class CustomerDetailControllerTests{
 
 		MockHttpServletResponse response = result.getResponse();
 		assertEquals(HttpStatus.PARTIAL_CONTENT.value(), response.getStatus());
+	}
+
+
+	@Test
+	public void updateCustomerWithNoAddress() throws Exception {
+		mockCustomer.setAddress(null);
+
+		Mockito.when(customerService.updateLivingAddress(mockCustomer)).thenReturn(null);
+
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/customer/cust-id")
+				.accept(MediaType.APPLICATION_JSON).content(customerWithNullAddressJson).contentType(MediaType.APPLICATION_JSON);
+
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+		MockHttpServletResponse response = result.getResponse();
+		assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+	}
+
+	@Test
+	public void createCustomerWithNoCustId() throws Exception {
+		Mockito.when(customerService.updateLivingAddress(Mockito.any())).thenReturn(null);
+
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/customer/cust-id")
+				.accept(MediaType.APPLICATION_JSON).content(customerWithNoCustIdJson).contentType(MediaType.APPLICATION_JSON);
+
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+		MockHttpServletResponse response = result.getResponse();
+		assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+	}	
+
+	@Test
+	public void updateCustomerWithCustIdNotFound() throws Exception {
+		mockAddress.setDoorNo("444-1");
+		mockAddress.setCity("New Orlean");
+		mockCustomer.setAddress(mockAddress);
+
+		Mockito.when(customerService.updateLivingAddress(mockCustomer)).thenThrow(ResourceNotFoundException.class);
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/customer/cust-id")
+				.accept(MediaType.APPLICATION_JSON).content(customerWithChangedAddressWithWrongCustIdJson).contentType(MediaType.APPLICATION_JSON);
+
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+		MockHttpServletResponse response = result.getResponse();
+		verify(customerService, never()).updateLivingAddress(Mockito.any());
+		assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
 	}
 	
 	@Test
@@ -160,7 +225,7 @@ public class CustomerDetailControllerTests{
 		verify(customerService).getAllCustomerByName(Mockito.anyString(), Mockito.any());
 		assertEquals(HttpStatus.OK.value(), response.getStatus());
 	}
-	
+
 	@Test
 	public void searchCustomerByLastName() throws Exception {
 
@@ -172,7 +237,7 @@ public class CustomerDetailControllerTests{
 		verify(customerService).getAllCustomerByName(Mockito.any(), Mockito.anyString());
 		assertEquals(HttpStatus.OK.value(), response.getStatus());
 	}
-	
+
 	@Test
 	public void searchCustomerWithoutName() throws Exception {
 
@@ -184,7 +249,7 @@ public class CustomerDetailControllerTests{
 		verify(customerService).getAllCustomerByName(Mockito.any(), Mockito.any());
 		assertEquals(HttpStatus.OK.value(), response.getStatus());
 	}
-	
+
 	@Test
 	public void searchCustomerByFirstAndLastName() throws Exception {
 
@@ -196,7 +261,7 @@ public class CustomerDetailControllerTests{
 		verify(customerService).getAllCustomerByName(Mockito.anyString(), Mockito.anyString());
 		assertEquals(HttpStatus.OK.value(), response.getStatus());
 	}
-	
+
 	private static Address populateAddress() {
 		Address address = new Address();
 		address.setDoorNo("237-1");
@@ -213,6 +278,24 @@ public class CustomerDetailControllerTests{
 		customer.setLastName("Hamphire");
 		customer.setAddress(mockAddress);
 		return customer;
+	}
+
+	private static List<Customer> populateCustomerList() {
+		ArrayList<Customer> customerList = new ArrayList<Customer>();
+
+		Address address = new Address();
+		Customer customer = new Customer();
+		customer.setFirstName("Brian");
+		customer.setLastName("Hamphire");
+		customer.setAddress(address);		
+		customerList.add(customer);
+
+		Customer customer1 = new Customer();
+		customer1.setFirstName("Brian");
+		customer1.setLastName("Hamphire");
+		customer.setAddress(address);
+		customerList.add(customer1);
+		return customerList;
 	}
 
 }
