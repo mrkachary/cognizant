@@ -46,14 +46,14 @@ public class CustomerDetailControllerTests{
 	Customer mockCustomer = populateCustomer(mockAddress);
 	List<Customer> mockCustomerList = populateCustomerList();
 
-	String customerJson = "{\"first_name\":\"Brian\",\"last_name\":\"Hamphire\",\"cust_address\":{\"door_no\":\"237-1\",\"street\":\"Briadale St\",\"city\":\"New York\",\"country\":\"United States\",\"zip_code\":\"05601\"}} ";
-	String customerWithoutFirstnameJson = "{\"first_name\":\"\",\"last_name\":\"Hamphire\",\"cust_address\":{\"door_no\":\"237-1\",\"street\":\"Briadale St\",\"city\":\"New York\",\"country\":\"United States\",\"zip_code\":\"05601\"}} ";
-	String customerWithoutLastnameJson = "{\"first_name\":\"Brian\",\"last_name\":\"\",\"cust_address\":{\"door_no\":\"237-1\",\"street\":\"Briadale St\",\"city\":\"New York\",\"country\":\"United States\",\"zip_code\":\"05601\"}} ";
-	String customerWithChangedAddressJson = "{\"cust_id\":1,\"first_name\":\"Brian\",\"last_name\":\"Hamphire\",\"cust_address\":{\"door_no\":\"444-1\",\"street\":\"Briadale St\",\"city\":\"New Orlean\",\"country\":\"United States\",\"zip_code\":\"05601\"}} ";
-	String customerWithoutAddressJson = "{\"first_name\":\"Brian\",\"last_name\":\"Hamphire\"} ";
-	String customerWithNullAddressJson = "{\"cust_id\":1,\"first_name\":\"Brian\",\"last_name\":\"Hamphire\",\"cust_address\":null} ";
-	String customerWithNoCustIdJson = "{\"first_name\":\"Brian\",\"last_name\":\"Hamphire\",\"cust_address\":{\"door_no\":\"237-1\",\"street\":\"Briadale St\",\"city\":\"New York\",\"country\":\"United States\",\"zip_code\":\"05601\"}} ";
-	String customerWithChangedAddressWithWrongCustIdJson = "{\"cust_id\":999999,\"first_name\":\"Brian\",\"last_name\":\"Hamphire\",\"cust_address\":\"\"} ";
+	String customerJson = "{\"first_name\":\"Brian\",\"last_name\":\"Hamphire\",\"age\":45,\"cust_address\":{\"door_no\":\"237-1\",\"street\":\"Briadale St\",\"city\":\"New York\",\"country\":\"United States\",\"zip_code\":\"05601\"}} ";
+	String customerWithoutFirstnameJson = "{\"first_name\":\"\",\"last_name\":\"Hamphire\",\"age\":45,\"cust_address\":{\"door_no\":\"237-1\",\"street\":\"Briadale St\",\"city\":\"New York\",\"country\":\"United States\",\"zip_code\":\"05601\"}} ";
+	String customerWithoutLastnameJson = "{\"first_name\":\"Brian\",\"last_name\":\"\",\"age\":45,\"cust_address\":{\"door_no\":\"237-1\",\"street\":\"Briadale St\",\"city\":\"New York\",\"country\":\"United States\",\"zip_code\":\"05601\"}} ";
+	String customerWithChangedAddressJson = "{\"cust_id\":1,\"first_name\":\"Brian\",\"last_name\":\"Hamphire\",\"age\":45,\"cust_address\":{\"door_no\":\"444-1\",\"street\":\"Briadale St\",\"city\":\"New Orlean\",\"country\":\"United States\",\"zip_code\":\"05601\"}} ";
+	String customerWithoutAddressJson = "{\"first_name\":\"Brian\",\"last_name\":\"Hamphire\",\"age\":45} ";
+	String customerWithNullAddressJson = "{\"cust_id\":1,\"first_name\":\"Brian\",\"last_name\":\"Hamphire\",\"age\":45,\"cust_address\":null} ";
+	String customerWithNoCustIdJson = "{\"first_name\":\"Brian\",\"last_name\":\"Hamphire\",\"age\":45,\"cust_address\":{\"door_no\":\"237-1\",\"street\":\"Briadale St\",\"city\":\"New York\",\"country\":\"United States\",\"zip_code\":\"05601\"}} ";
+	String customerWithChangedAddressWithWrongCustIdJson = "{\"cust_id\":999999,\"first_name\":\"Brian\",\"last_name\":\"Hamphire\",\"age\":45,\"cust_address\":\"\"} ";
 	
 	@Test
 	public void retrieveAllCustomer() throws Exception {
@@ -276,6 +276,7 @@ public class CustomerDetailControllerTests{
 		Customer customer = new Customer();
 		customer.setFirstName("Brian");
 		customer.setLastName("Hamphire");
+		customer.setAge(45);
 		customer.setAddress(mockAddress);
 		return customer;
 	}
@@ -287,12 +288,14 @@ public class CustomerDetailControllerTests{
 		Customer customer = new Customer();
 		customer.setFirstName("Brian");
 		customer.setLastName("Hamphire");
+		customer.setAge(45);
 		customer.setAddress(address);		
 		customerList.add(customer);
 
 		Customer customer1 = new Customer();
 		customer1.setFirstName("Melena");
 		customer1.setLastName("Hamphire");
+		customer.setAge(40);
 		customer.setAddress(address);
 		customerList.add(customer1);
 		return customerList;

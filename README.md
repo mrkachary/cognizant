@@ -28,6 +28,7 @@ Swagger is enabled. After installing the please click [Here](http://localhost:80
  {
     "first_name":"Brian",
     "last_name":"Hamphire",
+    "age":45,
     "cust_address":{
         "door_no":"1",
         "street":"Bhoi Street",
@@ -44,6 +45,7 @@ Swagger is enabled. After installing the please click [Here](http://localhost:80
  	 "cust_id":"1",
     "first_name":"Brian",
     "last_name":"Hamphire",
+    "age":45,
     "cust_address":{
         "door_no":"237-1",
         "street":"Briardale St",
@@ -55,7 +57,7 @@ Swagger is enabled. After installing the please click [Here](http://localhost:80
 ```
 ## Production Enablement
 
-The spring boot 2 is enabled with actuator to monitor the health of the application. Also, profiling has been done for auto deployment to in Dev, QA, Staging and Production environment. Extensive test cases has been incorporated.
+The spring boot 2 is enabled with actuator to monitor the health of the application. Also, profiling has been done for auto deployment to in Dev, QA, Staging and Production environment. Extensive test cases have been incorporated.
 
 ## Installation
 The application is build with Spring Boot 2 and self started with contained tomcat. Please build and run the customer-detail-management-0.0.1-SNAPSHOT.jar. Use below command to start locally 

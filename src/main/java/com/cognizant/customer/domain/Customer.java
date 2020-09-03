@@ -21,6 +21,9 @@ public class Customer {
 	@JsonProperty("cust_address")
 	private Address address;
 
+	@JsonProperty("age")
+	private int age;
+	
 	@JsonProperty("created_date")
 	private Timestamp createdDate;
 

@@ -49,6 +49,9 @@ public class CustomerDTO {
 	@Column(name="LAST_NAME")
 	private String lastName;
 	
+	@Column(name="AGE")
+	private int age;
+	
 	@Column(name="CUST_ADDRS_ID")
 	private long custAddressId;
 
