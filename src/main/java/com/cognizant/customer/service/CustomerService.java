@@ -43,8 +43,8 @@ public class CustomerService {
 		customer.getAddress().setUpdatedDate(currentTimestamp);
 
 		log.info("Started creating customer");
-		CustomerDTO toModel = customerMapper.mapDomainToModel(customer);
-		customer = customerMapper.mapModelToDomain(customerRepository.save(toModel));		
+		CustomerDTO toModel = customerMapper.mapCustomerDomainToModel(customer);
+		customer = customerMapper.mapCustomerModelToDomain(customerRepository.save(toModel));		
 		log.info("Successfully created a customer with customer id :"+customer.getCustId());
 		return customer;
 	}
@@ -60,7 +60,7 @@ public class CustomerService {
 		List<Customer> customers = new ArrayList<Customer>();
 
 		for(CustomerDTO procuredCustomer : procuredCustomers) {
-			Customer customer = customerMapper.mapModelToDomain(procuredCustomer);
+			Customer customer = customerMapper.mapCustomerModelToDomain(procuredCustomer);
 			customers.add(customer);
 		}
 		return customers;
@@ -74,11 +74,11 @@ public class CustomerService {
 	 * @return
 	 */
 	public List<Customer> getAllCustomerByName(String firstName, String lastName) {
-		List<com.cognizant.customer.model.CustomerDTO> procuredCustomers = customerRepository.getAllCustomerByName(firstName, lastName);
+		List<CustomerDTO> procuredCustomers = customerRepository.getAllCustomerByName(firstName, lastName);
 		List<Customer> customers = new ArrayList<Customer>();
 
-		for(com.cognizant.customer.model.CustomerDTO procuredCustomer : procuredCustomers) {
-			Customer customer = customerMapper.mapModelToDomain(procuredCustomer);
+		for(CustomerDTO procuredCustomer : procuredCustomers) {
+			Customer customer = customerMapper.mapCustomerModelToDomain(procuredCustomer);
 			customers.add(customer);
 		}
 		return customers;
@@ -92,7 +92,7 @@ public class CustomerService {
 	 */
 	public Customer getCustomerById(long custId) {
 		CustomerDTO toModel = customerRepository.getCustomerById(custId);
-		return customerMapper.mapModelToDomain(toModel);
+		return customerMapper.mapCustomerModelToDomain(toModel);
 	}
 
 	/**
@@ -105,18 +105,18 @@ public class CustomerService {
 	 */
 
 	public Customer updateLivingAddress(Customer customer) throws ResourceNotFoundException {
-		com.cognizant.customer.model.CustomerDTO toModel = customerRepository.getCustomerById(customer.getCustId());
+		CustomerDTO toModel = customerRepository.getCustomerById(customer.getCustId());
 		Date currentDate = new Date();
 		Timestamp currentTimestamp = new Timestamp(currentDate.getTime());
 		if(toModel!=null) {
-			com.cognizant.customer.model.CustomerDTO updatedCustomer= customerMapper.mapAddress(toModel, customer);
+			CustomerDTO updatedCustomer= customerMapper.mapAddressToCustomer(toModel, customer);
 
 			updatedCustomer.setUpdatedDate(currentTimestamp);
 			updatedCustomer.getAddress().setUpdatedDate(currentTimestamp);
 			log.info("Updating customer living address");
 			toModel = customerRepository.updateLivingAddress(updatedCustomer);
 			log.info("Successfully updating customer living address");
-			return customerMapper.mapModelToDomain(toModel);
+			return customerMapper.mapCustomerModelToDomain(toModel);
 		} else {
 			log.error("Cannot update customer address");
 			throw new ResourceNotFoundException("could not update customer with id "+customer.getCustId());
