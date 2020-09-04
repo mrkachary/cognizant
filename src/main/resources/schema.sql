@@ -19,5 +19,5 @@ age int not null,
 cust_addrs_id bigint,
 created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-foreign key (cust_addrs_id) references ADDRESS(cust_addrs_id)
+foreign key (cust_addrs_id) references ADDRESS
 );

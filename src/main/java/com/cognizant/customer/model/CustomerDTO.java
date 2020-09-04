@@ -53,15 +53,15 @@ public class CustomerDTO {
 	@Column(name="AGE")
 	private int age;
 
-	@Column(name="CUST_ADDRS_ID")
+	@Column(name="CUST_ADDRS_ID") 
 	private long custAddressId;
-
+	 
 	@Column(name="CREATED_DATE")
 	private Timestamp createdDate;
 
 	@Column(name="UPDATED_DATE")
 	private Timestamp updatedDate;
-
+	
 	@OneToOne(cascade = CascadeType.MERGE)
 	private AddressDTO address;
 
