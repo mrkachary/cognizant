@@ -2,6 +2,7 @@ package com.cognizant.customer.model;
 
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -61,7 +62,7 @@ public class CustomerDTO {
 	@Column(name="UPDATED_DATE")
 	private Timestamp updatedDate;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.MERGE)
 	private AddressDTO address;
 
 }

@@ -40,6 +40,5 @@ public class AddressDTO {
 	private Timestamp createdDate;
 
 	@Column(name="UPDATED_DATE")
-	private Timestamp updatedDate;
-
+	private Timestamp updatedDate;	
 }

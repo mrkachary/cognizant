@@ -23,6 +23,7 @@ public class CustomerRepository {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	
 	/**
 	 * save a customer 
 	 * 
@@ -79,10 +80,14 @@ public class CustomerRepository {
 
 	@Transactional
 	public CustomerDTO updateLivingAddress(CustomerDTO updatedCustomer) {
-		entityManager.find(CustomerDTO.class, updatedCustomer.getCustId());
-		entityManager.persist(updatedCustomer.getAddress());
-		entityManager.merge(updatedCustomer);
-		return updatedCustomer;
+		
+		CustomerDTO existingCustomer = entityManager.find(CustomerDTO.class, updatedCustomer.getCustId());
+		if(existingCustomer!=null) {
+			existingCustomer = updatedCustomer;
+		}
+		entityManager.merge(existingCustomer.getAddress());
+		entityManager.flush();
+		return existingCustomer;
 	}
 
 }

@@ -71,17 +71,21 @@ public class CustomerMapper {
 
 	public CustomerDTO mapAddressToCustomer(CustomerDTO toModel,
 			Customer customer) {
+		toModel.setAge(customer.getAge());
+		toModel.setFirstName(customer.getFirstName());
+		toModel.setLastName(customer.getLastName());
+		
 		AddressDTO mappedAddress = new AddressDTO();
-
-		mappedAddress.setCustAddressId(customer.getAddress().getCustAddressId());
+		
+		mappedAddress.setCustAddressId(toModel.getAddress().getCustAddressId());
 		mappedAddress.setDoorNo(customer.getAddress().getDoorNo());
 		mappedAddress.setStreet(customer.getAddress().getStreet());
 		mappedAddress.setCity(customer.getAddress().getCity());
 		mappedAddress.setCountry(customer.getAddress().getCountry());
 		mappedAddress.setZipCode(customer.getAddress().getZipCode());
-		mappedAddress.setCreatedDate(customer.getAddress().getCreatedDate());
-		mappedAddress.setUpdatedDate(customer.getAddress().getUpdatedDate());
-
+		mappedAddress.setUpdatedDate(toModel.getUpdatedDate());
+		mappedAddress.setCreatedDate(toModel.getCreatedDate());
+	
 		toModel.setAddress(mappedAddress);
 		return toModel;
 	}
