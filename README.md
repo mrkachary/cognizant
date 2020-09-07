@@ -13,7 +13,7 @@ This application manages customer details with their address. Search by first or
 
 ## Operations
  - POST : /customer/create - For adding Customer detail
- - PUT : /customer/cust-id - For adding Customer detail
+ - PUT : /customer/cust-id - For updating Customer detail
  - GET : /customer/all - For fetching details of all Customer
  - GET : /customer/cust-id/{cust-id} - For fetching customer detail by customer id
  - GET : /customer/searchbyname - Search by first name or last name or with both first and last name
